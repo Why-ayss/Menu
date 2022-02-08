@@ -1,0 +1,181 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html" charset="utf-8">
+        <title>Menupan</title>
+        <meta name="description" content="for Overlay">
+        <script src="https://apis.google.com/js/api.js"></script>
+        <link rel="stylesheet" type="text/css" href="Menustyle.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-nanum-barun-gothic@1.0.0/nanumbarungothic.min.css">
+    </head>
+    <body>
+        <div id="mdOption" class="modal">
+            <div class="mdOptionContent"><span style="font-size: 1.4em">서버:</span>
+                <i class="fa fa-toggle-left fa-2x" onclick="prevServer()"></i>
+		<select id="slServer" onchange="selectServerChanged()">
+                    <option value="종합">종합</option>
+                    <option value="카벙클">카벙클</option>
+                    <option value="모그리">모그리</option>
+                    <option value="초코보">초코보</option>
+                    <option value="톤베리">톤베리</option>
+                    <option value="펜리르">펜리르</option>
+                </select><i class="fa fa-toggle-right fa-2x" onclick="nextServer()"></i><br/>
+                <label class="container">
+                <br/><div align="center">오류 제보 why.ayss@gmail.com</div>
+            </div>
+        </div>
+        <div id="Menu" style="width: 180px">
+            <table id="Menupan">
+            <colgroup>
+            <col style="width: 30%;">
+            <col style="width: 65%;">
+            <col style="width: 5%;">
+            </colgroup>
+              <tr>
+                <th id="head" colspan="3"><span>S급 쿨타임</span><span id="spServerName"></span><span class="bt"><button class="btn" onclick="showOption()" id="btOption"><i class="fa fa-cog fa-2x white"></i></button></span></th>
+              </tr>
+            </table>
+            <iframe id="myIframe" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" width="173" height="399" style="opacity:0.75"></iframe>
+        </div>
+
+        <script>
+             var SERVER = {
+                "CA" : "카벙클",
+                "CH" : "초코보",
+                "TO" : "톤베리",
+                "MO" : "모그리",
+                "FE" : "펜리르",
+                "Al" : "종합"
+            };
+//            localStorage.clear(); // option test
+            var server = SERVER.CA;
+            var selServer = document.getElementById("slServer");
+
+            if (storageAvailable('localStorage')) {
+                if(!localStorage.getItem('server')) {
+                    localStorage.setItem('server', server);
+                }
+            server = localStorage.getItem('server');
+            document.getElementById("spServerName").innerHTML = "(" + server + ")";
+            for(var i, j = 0; i = selServer.options[j]; j++) {
+                if(i.value == server) {
+                    selServer.selectedIndex = j;
+                    break;
+                    }
+                }
+            }
+            else {
+                console.error("Couldn't load localStorage");
+            }
+            loadsheet();
+            // Options Modal related functions
+            function storageAvailable(type) {
+                try {
+                    var storage = window[type],
+                    x = '__storage_test__';
+                    storage.setItem(x, x);
+                    storage.removeItem(x);
+                    return true;
+                }
+                catch(e) {
+                    return e instanceof DOMException && (
+                        // Firefox를 제외한 모든 브라우저
+                        e.code === 22 ||
+                        // Firefox
+                        e.code === 1014 ||
+                        // 코드가 존재하지 않을 수도 있기 때문에 테스트 이름 필드도 있습니다.
+                        // Firefox를 제외한 모든 브라우저
+                        e.name === 'QuotaExceededError' ||
+                        // Firefox
+                        e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+                        // 이미 저장된 것이있는 경우에만 QuotaExceededError를 확인하십시오.
+                        storage.length !== 0;
+                }
+            }
+            window.onclick = function(event) {
+            var mdOpt = document.getElementById("mdOption");
+            if(event.target == mdOpt) {
+                mdOpt.style.display = "none";
+                }
+            }
+
+            function showOption() {
+                var mdOpt = document.getElementById("mdOption");
+                mdOpt.style.display = "block";
+            }
+
+            function selectServerChanged() {
+                var selServer = document.getElementById("slServer");
+                server = selServer.options[selServer.selectedIndex].value;
+                localStorage.setItem('server', server);
+                document.getElementById("spServerName").innerHTML = "(" + server + ")";
+          	    loadsheet();
+            }
+
+            function prevServer() {
+                var selServer = document.getElementById("slServer");
+                if(selServer.selectedIndex > 0) {
+                    selServer.selectedIndex = selServer.selectedIndex - 1;
+                }
+                else if(selServer.selectedIndex == 0) {
+                    selServer.selectedIndex = selServer.selectedIndex + 5;
+                }
+                selectServerChanged();
+            }
+
+            function nextServer() {
+                var selServer = document.getElementById("slServer");
+                if(selServer.selectedIndex < 5) {
+                    selServer.selectedIndex = selServer.selectedIndex + 1;
+                }
+                else if(selServer.selectedIndex == 5) {
+                    selServer.selectedIndex = selServer.selectedIndex - 5;
+                }
+                selectServerChanged();
+            }
+
+            function loadsheet(){
+            myIframe = document.getElementById("myIframe");
+            url_string = "https://docs.google.com/spreadsheets/d/1svcKFLomYcKR2w04nRFQi_6z9PgeF5oP8rBw5HE-Yq0/htmlembed/sheet?gid=";
+            range = "A1:C19";
+            if(selServer.selectedIndex == 1){
+                gid="1003975034";
+        	    }
+            else if(selServer.selectedIndex == 2){
+                gid="159434991";
+        	    }
+            else if(selServer.selectedIndex == 3){
+                gid="82872837";
+        	    }
+            else if(selServer.selectedIndex == 4){
+                gid="1402097858";
+        	    }
+            else if(selServer.selectedIndex == 5){
+                gid="881128467";
+        	    }
+            else {
+         	gid = "679654526";
+                range = "A1:E19";
+         	    }
+         	adsURL = url_string+gid+"&range="+range;
+        	myIframe.src = adsURL;
+            }
+            function switchToSheet(id) {
+          if (document.getElementById('sheet-menu')) {
+            document.getElementById('sheet-button-' + activeSheetId)
+                .className = '';
+            document.getElementById('sheet-button-' + id).className = 'active';
+          }
+ 
+          document.getElementById(activeSheetId).style.display = 'none';
+          document.getElementById(id).style.display = '';
+          activeSheetId = id;
+ 
+          // posObjs() is defined in embeddedObjectJs (see EmbeddedObjectHtmlBuilder.java)
+          posObjs();
+          return false;
+        }
+            setInterval(loadsheet, 30000);
+        </script>
+    </body>
+</html>
